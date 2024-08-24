@@ -12,12 +12,9 @@ export default function Register() {
         'Content-Type': 'application/json'
       }
     });
-
-    const resJSON = await res.json();
-    console.log(resJSON);
+    /* const resJSON = await res.json();
+    console.log('resJSON ' + resJSON); */
   })
-
-  console.log(errors)
 
   return (
     <div>
@@ -55,7 +52,7 @@ export default function Register() {
 
         <label htmlFor="password" className="block">Contraseña</label>
         <input 
-          type="password"
+          type="text"
           { ...register("password", {
             required: {
               value: true,
@@ -70,7 +67,7 @@ export default function Register() {
 
         <label htmlFor="password_confirmation" className="block">Confirmar Contraseña</label>
         <input 
-          type="password"
+          type="text"
           { ...register("password_confirmation", {
             required: {
               value: true,
@@ -82,6 +79,17 @@ export default function Register() {
         { errors.password_confirmation?.message && (
           <span className="text-red-500 text-xs block mb-2">{errors.password_confirmation.message as string}</span>
         )}
+
+        <input 
+          type="hidden" 
+          value="1" 
+          {...register("status", {
+            required: {
+              value: true,
+              message: 'Estado requerido'
+            }
+          })}
+        />
 
         <button className="block bg-blue-500 w-full">
           Registrar
