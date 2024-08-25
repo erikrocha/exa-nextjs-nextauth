@@ -1,25 +1,46 @@
 'use client';
+import { useState } from 'react';
 import { useForm } from "react-hook-form";
 
 export default function Register() {
   const { register, handleSubmit, formState: {errors} } = useForm();
+  const [msg, setMsg] = useState<string | null>(null);
+  const [status, setStatus] = useState<string | null>(null);
 
   const onSubmit = handleSubmit(async(data) => {
-    const res = await fetch('/api/auth/register', {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json'
+
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      // Verificar si la respuesta es exitosa
+      if (!res.ok) {
+        throw new Error('Network response was not ok');
       }
-    });
-    /* const resJSON = await res.json();
-    console.log('resJSON ' + resJSON); */
+
+      // Intentar convertir la respuesta a JSON
+      const resJSON = await res.json();
+
+      // Actualizar el estado con el mensaje recibido
+      setMsg(resJSON.message);
+      setStatus(resJSON.status);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setMsg('Error al procesar la solicitud.');
+    }
+    
   })
 
   return (
     <div>
       <form onSubmit={onSubmit}>
         <h1>Register</h1>
+        <span className='bg-gray-700 text-white p-2 my-2 rounded-lg block'>{msg}</span>
         <label htmlFor="name" className="block">Nombre</label>
         <input 
           type="text"
@@ -52,7 +73,7 @@ export default function Register() {
 
         <label htmlFor="password" className="block">Contraseña</label>
         <input 
-          type="text"
+          type="password"
           { ...register("password", {
             required: {
               value: true,
@@ -67,7 +88,7 @@ export default function Register() {
 
         <label htmlFor="password_confirmation" className="block">Confirmar Contraseña</label>
         <input 
-          type="text"
+          type="password"
           { ...register("password_confirmation", {
             required: {
               value: true,
