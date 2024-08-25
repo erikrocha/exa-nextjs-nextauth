@@ -42,7 +42,25 @@ const authOptions = {
         /* console.log */
         /* userExists:  true */
 
+        // revisando si existe el usuario v1
+        // if (!userExists) return null;
+
+        // revisando si existe el usuario v2
+        if (!userExists || Object.keys(userExists).length === 0) {
+          console.log('Invalid credentials');
+          return null;
+        }
+
+        return {
+          id: userExists.id,
+          name: userExists.name,
+          email: userExists.email,          
+        };
+
         return null;
+
+        // .env -> NEXTAUTH_URL="http://localhost:3000"
+        // cuando el login es true, se va esa url
       },
     }),
   ],
