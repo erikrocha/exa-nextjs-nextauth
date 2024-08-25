@@ -1,14 +1,16 @@
 'use client';
 import { useState } from 'react';
 import { useForm } from "react-hook-form";
+import { useRouter } from 'next/navigation';
+
 
 export default function Register() {
   const { register, handleSubmit, formState: {errors} } = useForm();
   const [msg, setMsg] = useState<string | null>(null);
-  const [status, setStatus] = useState<string | null>(null);
+  //const [err, setErr] = useState<string | null>(null);
+  const router = useRouter();
 
   const onSubmit = handleSubmit(async(data) => {
-
     try {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
@@ -17,6 +19,10 @@ export default function Register() {
           'Content-Type': 'application/json'
         }
       });
+
+      console.log('res: ', res);
+
+      
       
       // Verificar si la respuesta es exitosa
       if (!res.ok) {
@@ -28,7 +34,17 @@ export default function Register() {
 
       // Actualizar el estado con el mensaje recibido
       setMsg(resJSON.message);
-      setStatus(resJSON.status);
+
+      // Actualizar el estado con los errores recibidos
+      //setErr(resJSON.errors);
+
+      if (res.ok && !resJSON.errors){
+        router.push('/auth/login');
+        console.log('zzz')
+      }
+
+      console.log('resJSON: ', resJSON.errors)
+
     } catch (error) {
       console.error('Error fetching data:', error);
       setMsg('Error al procesar la solicitud.');

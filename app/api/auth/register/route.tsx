@@ -25,7 +25,18 @@ export async function POST(request: any){
     if (resData.message) {
       //console.log('Error Message:', resData.message);
       return NextResponse.json(
-        { message: resData.message},
+        //{ message: resData.message},
+        resData
+
+        // resData devuelve esto:
+        /* {
+          "message": "El correo electrónico ya está registrado.",
+          "errors": {
+            "email": [
+              "El correo electrónico ya está registrado."
+            ]
+          }
+        } */
       )
     }
 
