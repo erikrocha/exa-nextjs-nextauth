@@ -23,7 +23,10 @@ export default function Login() {
       if(res && res.ok) {
         router.push('/dashboard');
       } else {
-        alert(res.error || 'Error en las credenciales');
+        const errorMessage = res.error === 'CredentialsSignin'
+          ? 'EL correo o contraseña son incorrectos. Por favor, intente de nuevo.'
+          : 'Error en las credenciales';
+        alert(errorMessage);
       }
     } else {
       alert('Error en la solicitud de inicio de sesión');
