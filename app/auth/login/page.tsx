@@ -1,11 +1,36 @@
 'use client';
 import {useForm} from 'react-hook-form';
+import {signIn} from 'next-auth/react';
+import {useRouter} from 'next/navigation';
 
 export default function Login() {
   const { register, handleSubmit, formState: {errors} } = useForm();
+  const router = useRouter();
 
-  const onSubmit = handleSubmit(data => {
-    console.log(data)
+  const onSubmit = handleSubmit(async (data) => {
+    console.log('data: ', data)
+    const res = await signIn('credentials', {
+      email: data.email,
+      password: data.password,
+      redirect: false
+    });
+
+    // Verificar si la respuesta es exitosa
+    /* if (!res.ok) {
+      throw new Error('Network response was not ok');
+    } */
+    if (res) {
+      if(res && res.ok) {
+        router.push('/dashboard');
+      } else {
+        alert(res.error || 'Error en las credenciales');
+      }
+    } else {
+      alert('Error en la solicitud de inicio de sesión');
+    }
+    
+
+    console.log('res: ', res)
   });
 
   return (
