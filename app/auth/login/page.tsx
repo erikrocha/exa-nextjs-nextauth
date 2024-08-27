@@ -22,6 +22,7 @@ export default function Login() {
     if (res) {
       if(res && res.ok) {
         router.push('/dashboard');
+        router.refresh();
       } else {
         const errorMessage = res.error === 'CredentialsSignin'
           ? 'EL correo o contraseña son incorrectos. Por favor, intente de nuevo.'
